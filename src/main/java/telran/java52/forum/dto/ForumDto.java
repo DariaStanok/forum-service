@@ -1,5 +1,6 @@
 package telran.java52.forum.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class ForumDto {
 	 String title;
 	 String content;
 	 String author; 
-	 Date dateCreated;
+	 LocalDateTime dateCreated;
 	 List<String> tags;
 	 Long likes;
 	 List<CommentDto>comments;
