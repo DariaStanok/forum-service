@@ -1,6 +1,6 @@
 package telran.java52.forum.dto;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 
@@ -8,6 +8,6 @@ import lombok.Getter;
 public class ForumAddDto {
 	 String title;
 	 String content;
-	 List<String> tags;
+	 Set <String> tags;
 	
 }

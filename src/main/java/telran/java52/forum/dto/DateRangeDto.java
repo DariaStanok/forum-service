@@ -1,11 +1,12 @@
 package telran.java52.forum.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 import lombok.Getter;
 
 @Getter
 public class DateRangeDto {
-	LocalDateTime dateFrom;
-	LocalDateTime dateTo;
+	LocalDate dateFrom;
+	LocalDate dateTo;
 }

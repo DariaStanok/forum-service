@@ -19,6 +19,7 @@ import telran.java52.forum.service.ForumService;
 
 @RestController
 @RequiredArgsConstructor
+// or @RequestMapping ("/forum")=>("/post/{user}")
 public class ForumController {
 
 	ForumService forumService;
