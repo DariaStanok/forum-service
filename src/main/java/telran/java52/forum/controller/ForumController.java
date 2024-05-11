@@ -22,37 +22,37 @@ import telran.java52.forum.service.ForumService;
 // or @RequestMapping ("/forum")=>("/post/{user}")
 public class ForumController {
 
-	ForumService forumService;
+	final ForumService forumService;
 
-	@PostMapping("/forum/post/{user}")
-	public ForumDto addPost( @PathVariable String user,@RequestBody ForumAddDto forumAddDto) {
-		return forumService.addPost(user, forumAddDto);
+	@PostMapping("/forum/post/{author}")
+	public ForumDto addPost( @PathVariable String author,@RequestBody ForumAddDto forumAddDto) {
+		return forumService.addPost(author, forumAddDto);
 	}
 
-	@GetMapping ("/forum/post/{postId}")
-	public ForumDto findPostById(@PathVariable String postId) {
-		return forumService.findPostById(postId);
+	@GetMapping ("/forum/post/{id}")
+	public ForumDto findPostById(@PathVariable String id) {
+		return forumService.findPostById(id);
 	}
 
-	@PutMapping("/forum/post/{postId}/like")
-	public void addLikeToPost(@PathVariable String postId) {
-		forumService.addLikeToPost(postId);
+	@PutMapping("/forum/post/{id}/like")
+	public void addLikeToPost(@PathVariable String id) {
+		forumService.addLikeToPost(id);
 		
 	}
 
-	@GetMapping("/forum/posts/author/{user}")
-	public List<ForumDto> findPostByAuthor(@PathVariable String user) {
-		return forumService.findPostByAuthor(user);
+	@GetMapping("/forum/posts/author/{author}")
+	public List<ForumDto> findPostByAuthor(@PathVariable String author) {
+		return forumService.findPostByAuthor(author);
 	}
 
-	@PutMapping("/forum/post/{postId}/comment/{user}")
-	public ForumDto addComment(@PathVariable String postId, @PathVariable String user,@RequestBody CommentAddDto commentAddDto) {
-		return forumService.addComment(postId, user, commentAddDto);
+	@PutMapping("/forum/post/{id}/comment/{author}")
+	public ForumDto addComment(@PathVariable String id, @PathVariable String author,@RequestBody CommentAddDto commentAddDto) {
+		return forumService.addComment(id, author, commentAddDto);
 	}
 
-	@DeleteMapping ("/forum/post/{postId}")
-	public ForumDto deletePost(@PathVariable String postId) {
-		return forumService.deletePost(postId);
+	@DeleteMapping ("/forum/post/{id}")
+	public ForumDto deletePost(@PathVariable String id) {
+		return forumService.deletePost(id);
 	}
 
 	@PostMapping ("/forum/posts/tags")
@@ -65,9 +65,9 @@ public class ForumController {
 		return forumService.findPostsByPeriod(dateRangeDto);
 	}
 
-	@PutMapping("/forum/post/{postId}")
-	public ForumDto updatePost(@PathVariable String postId,@RequestBody ForumAddDto forumAddDto) {
-		return forumService.updatePost(postId, forumAddDto);
+	@PutMapping("/forum/post/{id}")
+	public ForumDto updatePost(@PathVariable String id,@RequestBody ForumAddDto forumAddDto) {
+		return forumService.updatePost(id, forumAddDto);
 	}
 	
 	

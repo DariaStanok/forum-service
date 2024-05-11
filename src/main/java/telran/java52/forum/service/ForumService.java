@@ -10,22 +10,22 @@ import telran.java52.forum.dto.ForumDto;
 
 public interface ForumService {
 	
-	ForumDto addPost (String user, ForumAddDto forumAddDto);
+	ForumDto addPost (String author, ForumAddDto forumAddDto);
 	
-	ForumDto findPostById (String postId);
+	ForumDto findPostById (String id);
 	
-	void addLikeToPost (String postId);
+	void addLikeToPost (String id);
 	
-	List <ForumDto> findPostByAuthor (String user);
+	List <ForumDto> findPostByAuthor (String author);
 	
-	ForumDto addComment (String postId, String user, CommentAddDto commentAddDto);
+	ForumDto addComment (String id, String author, CommentAddDto commentAddDto);
 	
-	ForumDto deletePost (String postId);
+	ForumDto deletePost (String id);
 	
 	List<ForumDto> findPostsByTags (List<String>tags);
 	
 	List<ForumDto> findPostsByPeriod (DateRangeDto dateRangeDto);
 	
-	ForumDto updatePost (String postId, ForumAddDto forumAddDto);
+	ForumDto updatePost (String id, ForumAddDto forumAddDto);
 	
 }
