@@ -1,6 +1,7 @@
 package telran.java52.forum.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import telran.java52.forum.dto.CommentAddDto;
 import telran.java52.forum.dto.DateRangeDto;
 import telran.java52.forum.dto.ForumAddDto;
 import telran.java52.forum.dto.ForumDto;
+import telran.java52.forum.dto.exeptions.ForumNotFoundExeption;
+import telran.java52.forum.model.Comment;
 import telran.java52.forum.model.Post;
 
 @Service
@@ -30,33 +33,34 @@ public class ForumServiceImpl implements ForumService  {
 
 	@Override
 	public ForumDto findPostById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		Post post = postRepository.findById(id).orElseThrow(ForumNotFoundExeption::new);
+		return modelMapper.map(post, ForumDto.class);
 	}
 
 	@Override
 	public void addLikeToPost(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<ForumDto> findPostByAuthor(String author) {
-		// TODO Auto-generated method stub
-		return null;
+		Post post = postRepository.findById(id).orElseThrow(ForumNotFoundExeption::new);
+		post.addLike();
+		post = postRepository.save(post); 
 	}
 
 	@Override
 	public ForumDto addComment(String id, String author, CommentAddDto commentAddDto) {
-		// TODO Auto-generated method stub
-		return null;
+		Post post = postRepository.findById(id).orElseThrow(ForumNotFoundExeption::new);
+		Comment comment = new Comment(author, commentAddDto.getMessage());
+		post.addComment(comment);
+		post = postRepository.save(post);
+		return modelMapper.map(post,ForumDto.class);
 	}
 
 	@Override
-	public ForumDto deletePost(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ForumDto removePost(String id) {
+		Post post = postRepository.findById(id).orElseThrow(ForumNotFoundExeption::new);
+		postRepository.delete(post);
+		return modelMapper.map(post, ForumDto.class);
 	}
+		
+
 
 	@Override
 	public List<ForumDto> findPostsByTags(List<String> tags) {
@@ -69,13 +73,30 @@ public class ForumServiceImpl implements ForumService  {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public ForumDto updatePost(String id, ForumAddDto forumAddDto) {
+	public List<ForumDto> findPostByAuthor(String author) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
 
+	@Override
+	public ForumDto updatePost(String id, ForumAddDto forumAddDto) {
+		Post post = postRepository.findById(id).orElseThrow(ForumNotFoundExeption::new);
+		String content = forumAddDto.getContent();
+		String title = forumAddDto.getTitle();
+		Set <String> tags = forumAddDto.getTags();
+		if(content != null) {
+			 post.setContent(content);
+		}
+		if (title != null) {
+			post.setTitle(title);
+		}
+		if (tags != null) {
+			tags.forEach(post::addTag);
+		}
+		post = postRepository.save(post);
+		return modelMapper.map(post, ForumDto.class);
+	}
 }

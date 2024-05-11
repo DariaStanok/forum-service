@@ -2,12 +2,14 @@ package telran.java52.forum.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class ForumController {
 	}
 
 	@PutMapping("/forum/post/{id}/like")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void addLikeToPost(@PathVariable String id) {
 		forumService.addLikeToPost(id);
 		
@@ -51,8 +54,8 @@ public class ForumController {
 	}
 
 	@DeleteMapping ("/forum/post/{id}")
-	public ForumDto deletePost(@PathVariable String id) {
-		return forumService.deletePost(id);
+	public ForumDto removePost(@PathVariable String id) {
+		return forumService.removePost(id);
 	}
 
 	@PostMapping ("/forum/posts/tags")

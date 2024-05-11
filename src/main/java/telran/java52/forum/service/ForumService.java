@@ -20,7 +20,7 @@ public interface ForumService {
 	
 	ForumDto addComment (String id, String author, CommentAddDto commentAddDto);
 	
-	ForumDto deletePost (String id);
+	ForumDto removePost (String id);
 	
 	List<ForumDto> findPostsByTags (List<String>tags);
 	
