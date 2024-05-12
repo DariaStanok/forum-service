@@ -64,9 +64,13 @@ public class ForumServiceImpl implements ForumService  {
 
 	@Override
 	public List<ForumDto> findPostsByTags(List<String> tags) {
-		// TODO Auto-generated method stub
-		return null;
+		return postRepository.findByTagsIn(tags)
+				.map(post -> modelMapper.map(post, ForumDto.class))
+				.toList();
 	}
+
+
+	
 
 	@Override
 	public List<ForumDto> findPostsByPeriod(DateRangeDto dateRangeDto) {
@@ -76,8 +80,9 @@ public class ForumServiceImpl implements ForumService  {
 	
 	@Override
 	public List<ForumDto> findPostByAuthor(String author) {
-		// TODO Auto-generated method stub
-		return null;
+		return postRepository.findByAuthorIgnoreCase(author)
+				.map(post -> modelMapper.map(post, ForumDto.class))
+				.toList();
 	}
 
 
