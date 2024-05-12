@@ -1,5 +1,7 @@
 package telran.java52.forum.service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -70,19 +72,21 @@ public class ForumServiceImpl implements ForumService  {
 	}
 
 
-	
-
-	@Override
-	public List<ForumDto> findPostsByPeriod(DateRangeDto dateRangeDto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public List<ForumDto> findPostByAuthor(String author) {
 		return postRepository.findByAuthorIgnoreCase(author)
 				.map(post -> modelMapper.map(post, ForumDto.class))
 				.toList();
+	}
+	
+	@Override
+	public List<ForumDto> findPostsByPeriod(DateRangeDto dateRangeDto) {
+		LocalDateTime dayStarting = dateRangeDto.getDateFrom().atStartOfDay(); 
+        LocalDateTime dayEnding = dateRangeDto.getDateTo().atTime(LocalTime.MAX);
+		return postRepository.findByDateRangeIn(dateRangeDto)
+				.filter(post -> post.getDateCreated().isAfter(dayStarting) && post.getDateCreated().isBefore(dayEnding))
+	            .map(post -> modelMapper.map(post, ForumDto.class))
+	            .toList();
 	}
 
 
