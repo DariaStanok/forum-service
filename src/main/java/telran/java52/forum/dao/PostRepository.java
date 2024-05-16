@@ -16,6 +16,6 @@ public interface PostRepository extends MongoRepository<Post, String> {
 	
 	Stream<Post> findByTagsIn(List<String> tags);
 	
-	@Query("{ 'dateCreated' : { $gte: ?0.startOfDay, $lte: ?0.endOfDay }}")
+	@Query("{ 'dateCreated' : { $gte: ?0, $lte: ?1 }}")
 	Stream<Post> findByDateRangeIn(LocalDate dateFrom, LocalDate dateTo);
 }
