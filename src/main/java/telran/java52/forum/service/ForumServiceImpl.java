@@ -64,7 +64,7 @@ public class ForumServiceImpl implements ForumService  {
 
 	@Override
 	public List<ForumDto> findPostsByTags(List<String> tags) {
-		return postRepository.findByTagsIn(tags)
+		return postRepository.findByTagsInIgnoreCase(tags)
 				.map(post -> modelMapper.map(post, ForumDto.class))
 				.toList();
 	}
