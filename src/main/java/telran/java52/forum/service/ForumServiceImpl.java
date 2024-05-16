@@ -77,14 +77,12 @@ public class ForumServiceImpl implements ForumService  {
 				.toList();
 	}
 	
-	@Override
 	public List<ForumDto> findPostsByPeriod(DateRangeDto dateRangeDto) {
-	    return postRepository.findByDateRangeIn(dateRangeDto)
+	    return postRepository.findByDateRangeIn(dateRangeDto.getDateFrom(), dateRangeDto.getDateTo())
 	            .filter(post -> post.getDateCreated().isAfter(dateRangeDto.getStartOfDay()) && post.getDateCreated().isBefore(dateRangeDto.getEndOfDay()))
 	            .map(post -> modelMapper.map(post, ForumDto.class))
 	            .toList();
 	}
-
 
 	@Override
 	public ForumDto updatePost(String id, ForumAddDto forumAddDto) {

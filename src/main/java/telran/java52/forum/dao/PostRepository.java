@@ -1,12 +1,13 @@
 package telran.java52.forum.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import telran.java52.forum.dto.DateRangeDto;
+
 import telran.java52.forum.model.Post;
 
 public interface PostRepository extends MongoRepository<Post, String> {
@@ -16,5 +17,5 @@ public interface PostRepository extends MongoRepository<Post, String> {
 	Stream<Post> findByTagsIn(List<String> tags);
 	
 	@Query("{ 'dateCreated' : { $gte: ?0.startOfDay, $lte: ?0.endOfDay }}")
-	Stream<Post> findByDateRangeIn(DateRangeDto dateRangeDto);
+	Stream<Post> findByDateRangeIn(LocalDate dateFrom, LocalDate dateTo);
 }
