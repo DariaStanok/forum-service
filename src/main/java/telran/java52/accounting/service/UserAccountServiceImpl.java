@@ -3,6 +3,7 @@ package telran.java52.accounting.service;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 
@@ -15,12 +16,13 @@ import telran.java52.accounting.dto.UserRegisterDto;
 import telran.java52.accounting.dto.exeptions.IncorrectRoleExeption;
 import telran.java52.accounting.dto.exeptions.UserAccountNotFoundExeption;
 import telran.java52.accounting.dto.exeptions.UserExistExeption;
+import telran.java52.accounting.model.Role;
 import telran.java52.accounting.model.UserAccount;
 
 
 @Service
 @RequiredArgsConstructor
-public class UserAccountServiceImpl implements UserAccountService{
+public class UserAccountServiceImpl implements UserAccountService, CommandLineRunner{
 
 	final UserAccountRepository userAccountRepository;
 	final ModelMapper modelMapper;
@@ -89,6 +91,17 @@ public class UserAccountServiceImpl implements UserAccountService{
 		 userAccount.setPassword(password);
 		 userAccountRepository.save(userAccount);
 		
+	}
+	@Override
+	public void run(String... args) throws Exception {
+		if (!userAccountRepository.existsById("admin")) {
+			String password = BCrypt.hashpw("admin", BCrypt.gensalt());
+			UserAccount userAccount = new UserAccount("admin", "", "", password);
+			userAccount.addRole(Role.MODERATOR.name());
+			userAccount.addRole(Role.ADMINISTRATOR.name());
+			userAccountRepository.save(userAccount);
+		}
+
 	}
 
 }
