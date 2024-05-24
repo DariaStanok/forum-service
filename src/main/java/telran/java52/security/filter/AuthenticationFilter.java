@@ -83,7 +83,6 @@ public class AuthenticationFilter implements Filter {
 		public Principal getUserPrincipal() {
 			return new User(login, roles);
 		}
-
 	}
 
 }

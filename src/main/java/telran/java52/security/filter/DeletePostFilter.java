@@ -1,6 +1,7 @@
 package telran.java52.security.filter;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -14,18 +15,15 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import telran.java52.accounting.dao.UserAccountRepository;
-import telran.java52.accounting.model.Role;
-import telran.java52.accounting.model.UserAccount;
 import telran.java52.forum.dao.PostRepository;
 import telran.java52.forum.model.Post;
+import telran.java52.security.model.User;
 
 @Component
 @RequiredArgsConstructor
 @Order(60)
 public class DeletePostFilter implements Filter {
 	final PostRepository postRepository;
-    final UserAccountRepository userAccountRepository;
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -33,8 +31,8 @@ public class DeletePostFilter implements Filter {
 		 HttpServletRequest request = (HttpServletRequest) req;
 	        HttpServletResponse response = (HttpServletResponse) resp;
 	        if (checkEndPoint(request.getMethod(), request.getServletPath())) {
-	            String principal = request.getUserPrincipal().getName();
-	            UserAccount userAccount = userAccountRepository.findById(principal).get();
+	            User user = User.getUserFromPrincipal(request);
+	            Set<String> roles = user.getRoles();
 	            String[] parts = request.getServletPath().split("/");
 	            String postId = parts[parts.length - 1];
 	            Post post = postRepository.findById(postId).orElse(null);
@@ -42,7 +40,7 @@ public class DeletePostFilter implements Filter {
 	                response.sendError(404, "Not found");
 	                return;
 	            }
-	            if (!(principal.equals(post.getAuthor()) || userAccount.getRoles().contains(Role.MODERATOR))) {
+	            if (!(user.getName().equals(post.getAuthor()) || roles.contains("MODERATOR"))) {
 	                response.sendError(403, "You do not have permission to access this resource");
 	                return;
 	            }

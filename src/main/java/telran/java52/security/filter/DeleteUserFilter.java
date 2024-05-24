@@ -1,6 +1,7 @@
 package telran.java52.security.filter;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -14,16 +15,13 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import telran.java52.accounting.dao.UserAccountRepository;
-import telran.java52.accounting.model.Role;
-import telran.java52.accounting.model.UserAccount;
+import telran.java52.security.model.User;
 
 @Component
 @RequiredArgsConstructor
 @Order(40)
 public class DeleteUserFilter implements Filter {
 	
-	final UserAccountRepository userAccountRepository;
 	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -32,15 +30,16 @@ public class DeleteUserFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		if (checkEndpoint(request.getMethod(), request.getServletPath())) {
-			String principal = request.getUserPrincipal().getName();
-            UserAccount userAccount = userAccountRepository.findById(principal).get();
-			String[] arr = request.getServletPath().split("/");
+			User user = User.getUserFromPrincipal(request);{
+            Set<String> roles = user.getRoles();
+            String[] arr = request.getServletPath().split("/");
 			String owner = arr[arr.length - 1];
-			if (!(userAccount.getRoles().contains(Role.ADMINISTRATOR) || principal.equalsIgnoreCase(owner))) {
+			if (!(roles.contains("MODERATOR") || user.getName().equals(owner))) {
 				response.sendError(403, "Permission denied");
 				return;
 			}
 		}
+	}
 		chain.doFilter(request, response);
 	}
 
