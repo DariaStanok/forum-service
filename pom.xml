@@ -50,6 +50,11 @@
 		    <artifactId>jbcrypt</artifactId>
 		    <version>0.4</version>
 		</dependency>
+		<dependency>
+			<groupId>telran.java52</groupId>
+			<artifactId>jackson-intro</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
